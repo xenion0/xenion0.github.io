@@ -1,8 +1,9 @@
 # About Me
 
-Hi, I’m **Ahmed El-Ganainy** 👋 — a cybersecurity enthusiast and penetration tester based in Riyadh, Saudi Arabia.  
+Hi, I’m **Ahmed El-Ganainy** 👋.  
+I’ve always been curious about how systems work — and what happens when they don’t. That curiosity led me into cybersecurity, where I spend my time exploring apps, networks, and cloud systems to find hidden risks and help make them safer.
 
-I’ve always been fascinated by how systems work — and more importantly, how they can break. That curiosity led me into cybersecurity, where I now spend my time exploring applications, networks, and cloud environments to uncover hidden risks and help teams secure them.
+When I’m not testing systems, I enjoy building labs, learning new tools, and sharing what I know with the community.
 
 ---
 
