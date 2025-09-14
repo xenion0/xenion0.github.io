@@ -30,8 +30,8 @@ Along the way, I’ve had the chance to work with banks, enterprises, and govern
 
 ## A Few Highlights
 - Helped organizations **find and fix critical vulnerabilities** before attackers could.  
-- Ran **CTF competitions** and shared knowledge with the cybersecurity community in Oman, Qatar, Egypt, and Saudi Arabia.  
-- Explored mobile security in depth with tools like **MobSF, Frida, and Burp Suite**.  
+- One of my favorite things outside of client work is running **CTF competitions** and exchanging ideas with the security community in Oman, Qatar, Egypt, and Saudi Arabia.
+- Explored mobile security in depth.  
 - Currently leveling up my skills with the **OSCP certification**.  
 
 ---
