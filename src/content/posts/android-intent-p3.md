@@ -10,11 +10,9 @@ lang: ''
 ---
 
 ## What is Intent?
-Intent is a messaging object you can use to request an action from another application components (activities , services and Broadcast Receivers) 
+An Intent is a messaging object you use to request an action from another application component — an activity, a service or a broadcast receiver.
 
-Intents themselves are object containing information on operations to be performed .
-
-Intent is data structure designed to hold info on events or operations to be performed.
+It is a data structure that describes an operation to be performed, along with the information needed to perform it.
 
 Let’s look upon the informal way of defining Intents. You can think of Intents as a messaging service that is used to communicate between various components of the Android application.
  For example, if you want to send some message from Egypt to USA using the Post Office facility then you can do so by buying an Envelope and then pass the message in the Envelope and send the message to the desired location.
@@ -31,7 +29,7 @@ Explicit Intents are used to communicate with a particular component of the same
 provide the component name (class name ) This is usually for inter-application components.
 
   for example , if you want to launch an Activity by clicking some button  on the present Activity then you go to target activity 
-         code example for Explict Intent https://developer.android.com/guide/components/intents-filters#ExampleExplicit
+code example for Explicit Intent — https://developer.android.com/guide/components/intents-filters#ExampleExplicit
 
  ### 2-Implicit Intent
 used to invoke components of different application 
@@ -41,28 +39,28 @@ They don’t  provide the specific component name to be invoked but rely on syst
 
 don't name a specific component , but instead declare a general action to perform , which allow a component from another app to handle 
 For example , if you want to show the user a location on a map , you can use an implicit intent to request that another capable app show a specified location on a map 
-code example for Implicit Intent   https://developer.android.com/guide/components/intents-filters#ExampleSend
+code example for Implicit Intent — https://developer.android.com/guide/components/intents-filters#ExampleSend
 
-### How Implicit Intent find component for Intent??
+### How does an implicit intent find its component?
 If you call the Implicit Intent then , the Android system will search for all the available components that can be used to start that activity ,
 This process is done by comparing the content of the intent with the content present in the intent-filters declared in the AndroidManifest.xml
 If there is only one intent-filter that is compatible with the content of the intent the android system will start the desired component . <br/>
-But if there are am number of intent-filters that are compatible with the content of the intent then the android system will show you a list of application that can be used to perform 
+But if several intent-filters match the intent, the system shows a chooser listing the applications that can handle it.
 
-## Use cases Example of Intents
+## Use Cases for Intents
 1. start Activity
 2. Start a service
 3. Delivering a broadcast 
 
 ![](https://i.imgur.com/qLfMfBM.png)
 
-## Intent Component
+## Intent Components
 
 Intent is a data structure designed to hold information on events or operation that android system used to determine which component to start  (such as the exact component name or component category that should receive the intent)
 
 1-Component Name:  <br/>
 This is optional , but it's critical piece of information that makes an Intent explicit , meaning that intent should be delivered only to the app component defined by the component name .
-without a component name the intent is implicit and Android system will decides which component should recive the intent
+without a component name the intent is implicit and the system decides which component should receive it
 
 2-Action: <br/>
 A string that specifies the generic action to perform (such as view or pick)
@@ -74,9 +72,9 @@ Use this action in an intent with startActivity()  when you have some informatio
 3- Extras :  <br/>
 you can add extra data to intent in the for of key-value pairs and this extras information can be passed from one activity to the other <br/>
 4-Category :  <br/>
-Category is used in case of Explicit Intents where you need to specify the type of application that will be used to perform a particular action.  <br/>
+A qualifier the intent filter must also match — `DEFAULT` (required for implicit resolution), `BROWSABLE` (reachable from a browser), `LAUNCHER` (app entry point). This is an **implicit**-intent mechanism: an explicit intent names its target directly, so the filter, category included, is never consulted.  <br/>
 5-Data : <br/>
-important to specify the type of data (its MIME type) on which the action is to be performed by Android system which the help of intents
+The URI of the data to act on, plus its MIME type — this is what the system matches against the `<data>` element of an intent filter.
  
 ## Intent Filter
 Each components can provide Intent-filters   structures that provide information on which Intents can be handled by particular components.
@@ -95,23 +93,19 @@ In each app component that includes an `<intent-filter>` element,
  explicitly set a value for android:exported.<br/>
  This attribute indicates whether the app component is accessible to other apps.
     
-In the example scenario below, MainActivity is sending sensitive data to MainActivity2 via intent. But the malicious app did the same definition of `<intent-filter>` to itself. Because of this situation, the implict intent scenario exposed and the relevant data was transmitted to the 3rd party application.    
+In the example scenario below, MainActivity is sending sensitive data to MainActivity2 via intent. But the malicious app did the same definition of `<intent-filter>` to itself. Because of this, the implicit-intent scenario is exposed and the data is transmitted to the third-party application.
 
 ![](https://i.imgur.com/2TU79n9.png)
 
-Example: if we have a component file which will use implicit intent (action, data, category) like action call a tel and there are more than one component with the same contents of call a tel, and uses the same intent. You may see the option Open with: Call Phone - Truecaller - etc.. and that's because of the existing of more than one component matches and handles same intent.
+Example: if we have a component that uses an implicit intent (action, data, category) — say an action that calls a phone number — and more than one component matches it, you will see an **Open with: Call Phone · Truecaller · …** chooser. That is the system resolving several matching components for the same intent.
 
-When intent filters are mentioned for a component in the Manifest file that component automatically becomes exported unless the developer overrides that by mentioning exported=FALSE in the component attribute.
-    
-Example: if we have a component file which will use implicit intent (action, data, category) like action call a tel and there are more than one component with the same contents of call a tel, and uses the same intent. You may see the option Open with: Call Phone - Truecaller - etc.. and that's because of the existing of more than one component matches and handles same intent.
-
-**When intent filters are mentioned for a component in the Manifest file that component automatically becomes exported unless the developer overrides that by mentioning exported=FALSE in the component attribute.**
+When intent filters are declared for a component in the manifest, that component automatically becomes exported — unless the developer overrides it by setting `exported="false"` on the component.
     
     
     
 ## Examples of Intent
 
-### Why we need to know about how to create Intent?
+### Why build a POC app?
     
 when want to exploit the bug and create POC will be better if create app make that 
 
@@ -136,7 +130,7 @@ doesn’t specify the component. In such a case, intent provides information on 
 ![](https://i.imgur.com/OE2JzKw.png)![](https://i.imgur.com/9AYkk1C.png)
 
     
-for example we chose chrome to accept ower action to do 
+for example we chose Chrome to accept our action
 chrome open and take our url as input to open  
 ![](https://i.imgur.com/ZZaNjKO.png)
     
@@ -145,26 +139,20 @@ chrome open and take our url as input to open
 ![](https://i.imgur.com/WJTuE23.png)
 
 1- Intent object and in constructor  we give it action we need to do <br/>
-2- here give intent the  uri  as data to oben in webview <br/>
+2- here we give the intent the URI as data to open in a WebView<br/>
 3- start the Intent
 
 ## Attacks in Intents
     
 
-**The default behavior depends on whether the component is likely to be used externally. 
-In the case of Activities, Services, and Broadcast Receivers, the default depends on how the component is configured with regard to Intents. 
-As we have seen, a component can specify an Intent filter that allows it to receive Intents from other apps to carry out tasks.
-As such, if a component specifies an Intent filter, it is assumed that you want the component to be accessed by other apps and it is, by default, exported and thus public.
-If, however, no Intent filter is specified for a component, the only way to send an Intent to it is to fully specify the component’s class name. 
-Therefore, it is assumed that you do not want to make this component publicly accessible, so the default exported is false and the component is private.**
+> The default depends on whether the component is likely to be used externally. For Activities, Services and Broadcast Receivers it follows from how the component is configured with regard to intents: a component that declares an intent filter is assumed to be intentionally reachable by other apps, and is therefore exported by default. A component with no intent filter can only be reached by naming its class explicitly, so it is assumed private — `exported` defaults to false.
+>
+> — Jeff Six, *Application Security for the Android Platform*
 
-```    
-this paragraph important to understand i take it from 
-book Application Security for the Android Platform by Jeff Six
-```    
+This is the most useful mental model for reading a manifest: **a filter is a declaration that the component is meant to be reachable, and the `exported` default follows from it.**
    
 [link for lab Intent Redirection (Access to Protected Components)](https://github.com/optiv/InsecureShop/releases/download/v1.0/InsecureShop.apk)   
-first you need to reverse apk with tool like jadx-gui and look in code will find this code vul take your extra and start with it a new activity 
+reverse the APK with a tool like jadx-gui; the vulnerable code takes your extra and starts a new activity with it.
 
 ```xml
           <activity android:name="com.insecureshop.WebView2Activity">
@@ -198,108 +186,16 @@ make intent as extra that will start new activity this technique look like neste
 
 that mean exploit done 
  
-## Diff between Explicit & Implicit Intent
-<table>
+## Explicit vs Implicit Intents
+|  | Explicit Intent | Implicit Intent |
+| --- | --- | --- |
+| Target | Names the exact component (package + class) | Declares an action; the system resolves a component |
+| Resolution | The intent filter is **not** consulted | Matched against every registered intent filter via PackageManager |
+| Scope | Inside one app, or a known external component | Across applications |
+| Data | `putExtra()` / `getStringExtra()` for key-value data | Carries action, data URI and category rather than extras |
+| Typical use | Navigating between your own activities | Sharing, opening a URL, dialling a number |
 
-<thead>
-
-<tr>
-
-<th>
-
-Explicit Intent
-
-</th>
-
-<th>
-
-Implicit Intent
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td>
-
-As already mentioned above explicit intents are those in which the user has a clear vision and knows exactly which activity can handle the requests.
-
-**Example**: When you have a Listview screen on tap of each item you will go to detail activity  
-
-**Intent = Intent(applicationContext,DetailActivity::class.java)**
-
-**startActivity(intent)**
-
-</td>
-
-<td>
-
-Implicit intents do not name a specific component like explicit intent, instead declare general action to perform, which allows a component from another app to handle.
-
-**Example:** When you tap the share button in any app you can see the Gmail, Bluetooth, and other sharing app options. Here user sends a request is the implicit intent request which can be handled by these Gmail, Bluetooth-like app.
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>Explicit intent can do the specific application action which is set by the code like changing activity, downloading the file in the background, etc.</td>
-
-<td>It specifies the only action to be performed and does not directly specify Android Components.</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-In explicit intent, you can pass data to other activities by using the putExtra method and retrieve by using getIntent().
-
-**Example:**
-
-val intent = Intent(this, SecondActivity:: class.java).apply{
-
-putExtra(“key”,”New Value”)
-
-}
-
-startActivity(intent)
-
-**Second Screen:**
-
-val secondIntent = intent.getStringExtra(“key”)
-
-</td>
-
-<td>Here we just mention the action in the intent and OS decides which applications are suitable to handle the task, action across two different applications.</td>
-
-</tr>
-
-<tr>
-
-<td>Explicit intents are used for communication inside the application. Like changing activities inside the application.</td>
-
-<td>They are used for communication across two different applications.</td>
-
-</tr>
-
-<tr>
-
-<td>In explicit intent, the action target is delivered even the filter is not consulted.</td>
-
-<td>When you make an implicit call with the intent. OS look at the action and then it matches with all the filters intent-filters of all the registered activities of all application using PackageManager and then populates the result as a list, this process is called as intent Resolution. </td>
-
-</tr>
-
-</tbody>
-
-</table>
+The point worth keeping: in an explicit intent the target is delivered even though the filter is never consulted — which is exactly why intent filters cannot be treated as a security boundary.
     
 ## References
 https://hackerone.com/reports/200427  

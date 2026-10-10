@@ -10,14 +10,14 @@ lang: ''
 ---
 
 ## What is Activity?
-Each Android Application is composed of basic Android components such as Activity, Service, content Provider, and Broadcast Receiver. Among them, Activity is the main body of the application. It undertakes a lot of display and interaction work, and can even be understood as an "interface" "It's just an Activity.
+An Android app is built from four component types: Activity, Service, Content Provider and Broadcast Receiver. Of these, Activity is the one the user actually sees — it is the app's user interface, and it is usually where you will spend most of your testing time.
 
-Activity is a visual user interface displayed for user actions. For example, an activity can display a list of menu items for the user to choose from, or display some photos with descriptions. An SMS application can include an activity that displays a list of contacts to send to, an activity that writes a text message to a selected contact, and an activity that scrolls through previous text messages and changes settings. Although together they form a cohesive user interface, each activity remains independent of the others. Each is implemented as a subclass of the base class Activity class.
+An activity is a single screen of user interface. An SMS app, for example, might have one activity listing contacts, another for composing a message to a selected contact, and a third for scrolling through previous messages and changing settings. Together they form a coherent app, but each activity is independent of the others, and each is implemented as a subclass of the base `Activity` class.
 
-An application can have only one activity, or, like the SMS application just mentioned, contain many. The role of each activity, and its number, naturally depends on the application and its design. In general, there is always an application that is marked as the first one the user sees when the application starts. The way to move from one activity to another is to start the next one with the current activity.
+An app can have a single activity or many. One of them is normally marked as the entry point the user sees at launch — the `LAUNCHER` activity. Moving from one activity to another means starting the next one from the current one.
 
 
-## Knowledge points?
+## Background
 
 Reference: http://developer.android.com/guide/components/activities.html
 
@@ -25,9 +25,22 @@ Reference: http://developer.android.com/guide/components/activities.html
 
 ![](https://i.imgur.com/4Ilj5v9.png)
 
-### Start method
-show start
-Register components in the configuration file AndroidManifest.xml
+The callbacks you will see in code and in logs:
+
+- `onCreate()` — the activity is created; views inflated, saved state restored
+- `onStart()` — becoming visible
+- `onResume()` — in the foreground and interactive
+- `onPause()` — losing focus, still partly visible
+- `onStop()` — no longer visible
+- `onDestroy()` — being torn down
+
+For security work the interesting part is rarely the callbacks themselves but what happens to data as the activity moves between them — what gets written to disk or to logs on `onPause`/`onStop`, and whether sensitive values survive in saved instance state.
+
+### Starting an activity
+
+An activity can be started **explicitly** (you name the target component) or **implicitly** (you describe an action and let the system resolve it).
+
+Explicit start — register the component in `AndroidManifest.xml`:
 ```xml
 <activity android:name=".ExampleActivity" android:icon="@drawable/app_icon">
     <intent-filter>
@@ -62,7 +75,7 @@ singleTop
 : If an instance of the target activity already exists on the top of the stack of the target task, the system will use the instance directly and call the activity's onNewIntent() (it will not be recreated)
 
 singleTask 
-: Creates an instance of the activity on top of a new task's stack. If the instance already exists, the system will use the instance directly and call the activity's onNewIntent() (it will not be recreated)
+: The activity becomes the root of its own task, and only one instance ever exists. If it already exists, the system reuses it and calls onNewIntent() instead of recreating it.
 
 singleInstance 
 : Similar to "singleTask", but no other activities will run in the target activity's task, and there will always be only one activity in that task.<br/>
@@ -71,8 +84,7 @@ The location of the setting is in the android:launchMode attribute of the activi
 ```xml
 <activity android:name="ActB" android:launchMode="singleTask"></activity>
 ```
-Activity launch mode is used to control the creation of task and Activity instances. Default "standard" mode. Standard mode will generate a new Activity instance once it is started and will not create a new task.
- When creating a new task, the content in the intent may be read by malicious applications, so it is recommended to use the default standard mode without configuring the launch mode attribute unless there are special requirements. launchMode can be overridden by Intent flags.
+Launch mode controls how tasks and activity instances are created; the default is `standard`. When a new task is created, the contents of the intent may be readable by other applications, so unless there is a specific requirement, leave `launchMode` at its default — it can also be overridden at runtime by intent flags.
  
 ### Intent Selector
 
@@ -87,6 +99,16 @@ The action attribute exported with no intent-filter configured defaults to false
 
 The exported attribute is only used to limit whether the activity is exposed to other apps, and the external startup of the activity can also be restricted through the permission declaration in the configuration file.
 
+**Since Android 12 (API 31) the `exported` value is no longer merely a default.** Any component that declares an `<intent-filter>` — activity, activity-alias, service or receiver — must set `android:exported` explicitly, or the app will not install at all. The manifest merger fails the build and the store rejects the upload, with:
+
+```
+Manifest merger failed : Apps targeting Android 12 and higher are required to
+specify an explicit value for android:exported when the corresponding
+component has an intent filter defined.
+```
+
+If a client's app refuses to install for no obvious reason, this is a common cause.
+
 `android:protectionLevel`
 
 http://developer.android.com/intl/zh-cn/guide/topics/manifest/permission-element.html
@@ -99,7 +121,7 @@ dangerous: Permissions like WRITE_SETTING and SEND_SMS are risky because these p
 
 signature: These permissions are only granted to programs signed with the same key as this program.
 
-signatureOrSystem: Similar to signature, except that the programs in the system also need to be eligible to access. This allows custom Android system applications to also gain permissions, and this level of protection helps integrate the system compilation process.
+signatureOrSystem: Similar to `signature`, but system apps are also eligible to access. This allows custom system applications to gain the permission, and helps integrate the system build process. **Deprecated since API 23** — the modern equivalent is `signature|privileged`.
 
 ```xml
 
@@ -123,7 +145,7 @@ android:permission="com.xenion.android.permission.protectedapp.MY_PERMISSION" >
 
 ## Activity classification
 
-Activity type and usage determine its risks and defense methods, so activities are classified as follows: Private, Public, Partner, In-house
+Activity type and usage determine its risks and defence methods. The classification used here comes from the OWASP MASTG: Private, Public, Partner, In-house.
 
 ![](https://i.imgur.com/oN9l2PY.png)
 
@@ -139,17 +161,17 @@ Activity type and usage determine its risks and defense methods, so activities a
 8-Use display startup when the purpose Activity is very clear <br/>
 9-Handle the data returned by the activity with care. The data returned by the target activity may be forged by a malicious application. <br/>
 10-Verify whether the target Activity is a malicious app, so as not to be deceived by intent, which can be verified by hash signature <br/>
-11-When Providing an Asset Secondhand, the Asset should be Protected with the Same Level of Protection <br/>
+11-When passing an asset on to another component, protect it at the same level as at its origin<br/>
 12-Do not send sensitive information as much as possible, and consider the risk that the information of the intent in the public Activity may be stolen by malicious applications
 
 ## Vuln Example
 
-[first you need to download InjuredAndroid apk from here](https://m.apkpure.com/ar/injuredandroid/b3nac.injuredandroid/download?from=details)
+Download InjuredAndroid from its official releases page: **[B3nac/InjuredAndroid releases](https://github.com/B3nac/InjuredAndroid/releases)**
 
 then install apk with adb tool with 
 ![](https://i.imgur.com/PVYtWzK.png)
 
-### test with Drozer
+### Testing with Drozer
 
 first we need to know package name with drozer 
 ```bash
@@ -160,7 +182,7 @@ b3nac.injuredandroid (InjuredAndroid)
 Identifying the attack surface
 ![](https://i.imgur.com/jCHQD1q.png)
 
-retrive info about each activity in app and listed exported and hidden activity
+retrieve info about each activity in the app and list the exported and hidden ones
 ![](https://i.imgur.com/hCAT552.png)
 
 Start activity with Drozer 
@@ -172,16 +194,16 @@ run app.activity.start --component <package name> <component name>
 run app.activity.start --component b3nac.injuredandroid   b3nac.injuredandroid.b25lActivity
 
 ```
-### with ADB tool form
-in this way you need to open apk with jadx-gui and search for  `android:exported="true"`
+### With the ADB tool
+In this approach you open the APK with jadx-gui and search for `android:exported="true"`
 
 ![](https://i.imgur.com/lBVj0Mp.png)
 
 `adb shell am start -n b3nac.injuredandroid/.b25lActivity`
 
-### with POC java code
+### With a POC app
 ![](https://i.imgur.com/wpi3fbu.png)
-creat intent that specify first package name and then component name
+create an intent that specifies first the package name and then the component name
 and then start the Intent will open the target activity
 
 ![](https://i.imgur.com/N05HSk6.png)![](https://i.imgur.com/2GWvSTK.png)
@@ -203,7 +225,7 @@ and then start the Intent will open the target activity
 
 * adb shell：am start -a action -n package/component
 * drozer: run app.activity.start --action android.action.intent.VIEW ...
-* Write your own app to call startActiviy() or startActivityForResult()
+* Write your own app to call startActivity() or startActivityForResult()
 
 
 ## References
