@@ -1,0 +1,23 @@
+/*
+ * Single explicit entry point for the theme stylesheets.
+ *
+ * These files used to be pulled into the build by accident: ImageWrapper.astro
+ * globbed "../../**", which matched every file under src/ including this
+ * directory. Nothing imported them directly, so they arrived as independent
+ * modules in a nondeterministic order.
+ *
+ * That broke the build roughly 1 run in 4, because markdown.css does
+ * `@apply link` / `@apply btn-regular-dark` on classes defined in main.css,
+ * and a cross-file `@apply` only resolves when both files are compiled in the
+ * same PostCSS pass, with main.css first. postcss-import (already configured
+ * in postcss.config.mjs) inlines these in order, which makes it deterministic.
+ *
+ * main.css must stay first - it owns `@tailwind components` and the
+ * `@layer components` block that markdown.css applies from.
+ */
+@import "./main.css";
+@import "./markdown.css";
+@import "./expressive-code.css";
+@import "./photoswipe.css";
+@import "./scrollbar.css";
+@import "./transition.css";

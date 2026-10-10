@@ -3,6 +3,13 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
+// Theme stylesheets. Previously these were never imported - they only reached
+// the build because ImageWrapper's import.meta.glob swept all of src/. Now the
+// dependency is explicit and ordered; see src/styles/global.css.
+import "../styles/variables.styl";
+import "../styles/global.css";
+import "../styles/markdown-extend.styl";
+
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
