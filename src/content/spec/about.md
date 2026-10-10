@@ -103,7 +103,7 @@ Delivered for **banking, enterprise and government** environments across **Saudi
 - Wireless network security testing
 
 **Tooling**
-`Burp Suite Professional` · `Nmap` · `Nuclei` · `sqlmap` · `Postman` · `MobSF` · `Frida` · `Objection` · `JADX` · `apktool` · `Checkmarx SAST/SCA` · `Fortify` · `DefectDojo`
+`Burp Suite Professional` · `Nmap` · `Nuclei` · `sqlmap` · `Postman` · `MobSF` · `Frida` · `Objection` · `JADX` · `apktool`
 
 **Scripting & PoC Development**
 Python · Bash · PowerShell · JavaScript — for enumeration, exploitation, automation and proof-of-concept development.
