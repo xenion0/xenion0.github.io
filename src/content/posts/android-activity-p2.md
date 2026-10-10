@@ -1,5 +1,5 @@
 ---
-title: Android Activity P2
+title: Android Activity Security P2
 published: 2022-02-25
 description: "How Android activities work and where they go wrong: the activity lifecycle, launch modes, intent filters and the exported and protectionLevel attributes, followed by a Drozer walkthrough against InjuredAndroid and a hardening checklist."
 image: ''
