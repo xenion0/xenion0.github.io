@@ -9,20 +9,7 @@ draft: false
 lang: ''
 ---
 
-|                  Content                  |
-|:-----------------------------------------:|
-|            **What is Intent?**            |
-|            **Type of Intent**             |
-|               **Use Cases**               |
-|           **Intent Component**            |
-|             **Intent Filter**             |
-|           **Example of Intent**           |
-|          **Attacks in Intents**           |
-| **Diff between Explicit & Implicit Intent** |
-
-                      
-
-## What is Intent ?
+## What is Intent?
 Intent is a messaging object you can use to request an action from another application components (activities , services and Broadcast Receivers) 
 
 Intents themselves are object containing information on operations to be performed .
@@ -56,20 +43,20 @@ don't name a specific component , but instead declare a general action to perfor
 For example , if you want to show the user a location on a map , you can use an implicit intent to request that another capable app show a specified location on a map 
 code example for Implicit Intent   https://developer.android.com/guide/components/intents-filters#ExampleSend
 
-### How Implicit Intent find component for Intent ??
+### How Implicit Intent find component for Intent??
 If you call the Implicit Intent then , the Android system will search for all the available components that can be used to start that activity ,
 This process is done by comparing the content of the intent with the content present in the intent-filters declared in the AndroidManifest.xml
 If there is only one intent-filter that is compatible with the content of the intent the android system will start the desired component . <br/>
 But if there are am number of intent-filters that are compatible with the content of the intent then the android system will show you a list of application that can be used to perform 
 
-## Use cases Example  of Intents :
+## Use cases Example of Intents
 1. start Activity
 2. Start a service
 3. Delivering a broadcast 
 
 ![](https://i.imgur.com/qLfMfBM.png)
 
-## Intent Component 
+## Intent Component
 
 Intent is a data structure designed to hold information on events or operation that android system used to determine which component to start  (such as the exact component name or component category that should receive the intent)
 
@@ -122,18 +109,18 @@ Example: if we have a component file which will use implicit intent (action, dat
     
     
     
-## Examples of  Intent
+## Examples of Intent
 
-### Why we need to know about how to create Intent ?
+### Why we need to know about how to create Intent?
     
 when want to exploit the bug and create POC will be better if create app make that 
 
-### Example of Explicit Intent:
+### Example of Explicit Intent
   
 ![](https://i.imgur.com/B6U1fVV.png)![](https://i.imgur.com/vFoKyw5.png)
 
     
-### Code Example    
+### Code Example
 ![](https://i.imgur.com/eIapXrB.png)
 
     1- Intent object that we will to go from first Activity to Target
@@ -143,7 +130,7 @@ when want to exploit the bug and create POC will be better if create app make th
     
 That small example about how to create Intent the same way can do to start another android component (Broadcast Receivers - Service - Activity)
 
-### Example of Implicit Intent:
+### Example of Implicit Intent
 doesn’t specify the component. In such a case, intent provides information on available components provided by the system that is to be invoked. For example, you may write the following code to view the webpage.
     
 ![](https://i.imgur.com/OE2JzKw.png)![](https://i.imgur.com/9AYkk1C.png)
@@ -154,7 +141,7 @@ chrome open and take our url as input to open
 ![](https://i.imgur.com/ZZaNjKO.png)
     
 
-### Code Example  
+### Code Example
 ![](https://i.imgur.com/WJTuE23.png)
 
 1- Intent object and in constructor  we give it action we need to do <br/>
@@ -196,7 +183,7 @@ this code in `WebView2Activity.java`
 
 The extra intent being passed is not sanitized or filtered in any way, which means we could use this activity to pass an intent which would then be used by the startActivity. That seems a perfect candidate to access the PrivateActivity.
 
-### **POC**    
+### POC
  ![](https://i.imgur.com/yTXIWNf.png)
 
 make intent as extra that will start new activity this technique look like nested intent intent object will start webView and extra object will start privateActivity
@@ -211,7 +198,7 @@ make intent as extra that will start new activity this technique look like neste
 
 that mean exploit done 
  
-## Diff between Explicit & Implicit Intent  
+## Diff between Explicit & Implicit Intent
 <table>
 
 <thead>
@@ -314,7 +301,7 @@ val secondIntent = intent.getStringExtra(“key”)
 
 </table>
     
-## Ref  
+## References
 https://hackerone.com/reports/200427  
 https://developer.android.com/guide/components/intents-filters
     

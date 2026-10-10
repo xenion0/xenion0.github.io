@@ -9,17 +9,7 @@ draft: false
 lang: ''
 ---
 
-|           Content           |
-|:---------------------------:|
-|   What is **Activity** ?    |
-|    **Knowledge points**     |
-| **Activity classification** |
-|      **Vuln Example**       |
-|       **Test method**       |
-|        **Referance**        |
-
-
-##  What is **Activity** ?
+## What is Activity?
 Each Android Application is composed of basic Android components such as Activity, Service, content Provider, and Broadcast Receiver. Among them, Activity is the main body of the application. It undertakes a lot of display and interaction work, and can even be understood as an "interface" "It's just an Activity.
 
 Activity is a visual user interface displayed for user actions. For example, an activity can display a list of menu items for the user to choose from, or display some photos with descriptions. An SMS application can include an activity that displays a list of contacts to send to, an activity that writes a text message to a selected contact, and an activity that scrolls through previous text messages and changes settings. Although together they form a cohesive user interface, each activity remains independent of the others. Each is implemented as a subclass of the base class Activity class.
@@ -27,7 +17,7 @@ Activity is a visual user interface displayed for user actions. For example, an 
 An application can have only one activity, or, like the SMS application just mentioned, contain many. The role of each activity, and its number, naturally depends on the application and its design. In general, there is always an application that is marked as the first one the user sees when the application starts. The way to move from one activity to another is to start the next one with the current activity.
 
 
-##  **Knowledge points** ?
+## Knowledge points?
 
 Reference: http://developer.android.com/guide/components/activities.html
 
@@ -37,7 +27,7 @@ Reference: http://developer.android.com/guide/components/activities.html
 
 ### Start method
 show start
-Register components in the configruation file AndroidManifest.xml
+Register components in the configuration file AndroidManifest.xml
 ```xml
 <activity android:name=".ExampleActivity" android:icon="@drawable/app_icon">
     <intent-filter>
@@ -133,7 +123,7 @@ android:permission="com.xenion.android.permission.protectedapp.MY_PERMISSION" >
 
 ## Activity classification
 
-Activity type and usage determine its risks and defense methods, so activities are classified as follows: Private, Public, Parter, In-house
+Activity type and usage determine its risks and defense methods, so activities are classified as follows: Private, Public, Partner, In-house
 
 ![](https://i.imgur.com/oN9l2PY.png)
 
@@ -152,11 +142,11 @@ Activity type and usage determine its risks and defense methods, so activities a
 11-When Providing an Asset Secondhand, the Asset should be Protected with the Same Level of Protection <br/>
 12-Do not send sensitive information as much as possible, and consider the risk that the information of the intent in the public Activity may be stolen by malicious applications
 
-## **Vuln Example**
+## Vuln Example
 
-[first you need to donwload InjuredAndroid apk from here](https://m.apkpure.com/ar/injuredandroid/b3nac.injuredandroid/download?from=details)
+[first you need to download InjuredAndroid apk from here](https://m.apkpure.com/ar/injuredandroid/b3nac.injuredandroid/download?from=details)
 
-then istall apk with adb tool with 
+then install apk with adb tool with 
 ![](https://i.imgur.com/PVYtWzK.png)
 
 ### test with Drozer
@@ -170,7 +160,7 @@ b3nac.injuredandroid (InjuredAndroid)
 Identifying the attack surface
 ![](https://i.imgur.com/jCHQD1q.png)
 
-retrive info about each activity in app and listed expoted and hiden activty
+retrive info about each activity in app and listed exported and hidden activity
 ![](https://i.imgur.com/hCAT552.png)
 
 Start activity with Drozer 
@@ -182,16 +172,16 @@ run app.activity.start --component <package name> <component name>
 run app.activity.start --component b3nac.injuredandroid   b3nac.injuredandroid.b25lActivity
 
 ```
-### with ADB tool form 
+### with ADB tool form
 in this way you need to open apk with jadx-gui and search for  `android:exported="true"`
 
 ![](https://i.imgur.com/lBVj0Mp.png)
 
 `adb shell am start -n b3nac.injuredandroid/.b25lActivity`
 
-### with POC java code 
+### with POC java code
 ![](https://i.imgur.com/wpi3fbu.png)
-creat intent that specify first packge name and then component name
+creat intent that specify first package name and then component name
 and then start the Intent will open the target activity
 
 ![](https://i.imgur.com/N05HSk6.png)![](https://i.imgur.com/2GWvSTK.png)
@@ -200,24 +190,24 @@ and then start the Intent will open the target activity
 
 
 
-## **Test method**
+## Test method
 
-### View activity:
+### View activity
 
 * Decompile and view the activity component in the configuration file AndroidManifest.xml (focus on those with intent-filter configured and those without export="false")
 * Open the installed app directly with RE to view the configuration file
 * Drozer scan: run app.activity.info -a packagename
 * Dynamic viewing: logcat sets the filter tag to ActivityManager
 
-### Start the activity:
+### Start the activity
 
-* adb shell：am start -a action -n package/componet
+* adb shell：am start -a action -n package/component
 * drozer: run app.activity.start --action android.action.intent.VIEW ...
 * Write your own app to call startActiviy() or startActivityForResult()
 
 
-## Referance
-[Andrid activity developer ](https://developer.android.com/reference/android/app/Activity)
+## References
+[Android activity developer ](https://developer.android.com/reference/android/app/Activity)
 
 report example <br/>
 https://hackerone.com/reports/537670
